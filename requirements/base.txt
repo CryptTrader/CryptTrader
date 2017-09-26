@@ -1,0 +1,12 @@
+django
+django-bower
+django-extensions
+django-test-without-migrations
+dj-database-url
+dj-static
+static3
+python-decouple
+coverage
+requests
+pyreadline
+pytz
