@@ -1,4 +1,56 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
-# Register your models here.
+from .models import BillingAccount, BTCOrder, BTCSellOrder, BTCBuyOrder, User
 
+
+def execute_order(self, request, queryset):
+    queryset.update(order_state='EXECUTED')
+
+
+def cancel_order(self, request, queryset):
+    queryset.update(order_state='EXECUTED')
+
+
+class BillingAccountModelAdmin(admin.ModelAdmin):
+    list_display = 'username', 'balance_brl', 'balance_btc', 'active', 'created_at'
+    search_fields = 'user.username', 'active'
+
+    def username(self, obj):
+        return obj.user.username
+
+
+class BTCOrderModelAdmin(admin.ModelAdmin):
+    list_display = 'username', 'type', 'amount_brl', 'amount_btc', 'exchange_rate', \
+                   'order_state', 'is_executed', 'created_at'
+    list_filter = 'type', 'order_state'
+    search_fields = 'state',
+    date_hierarchy = 'created_at'
+    actions_on_bottom = True
+    actions = [execute_order, cancel_order]
+
+    def username(self, obj):
+        return obj.billing_account.user.username
+
+    def is_executed(self, obj):
+        return obj.order_state == 'EXECUTED'
+
+    execute_order.short_description = 'Execute Orders'
+    cancel_order.short_description = 'Cancel Orders'
+
+
+class BTCBuyOrderModelAdmin(BTCOrderModelAdmin):
+    list_display = 'username', 'amount_brl', 'amount_btc', 'exchange_rate', \
+                   'order_state', 'created_at'
+
+
+class BTCSellOrderModelAdmin(BTCOrderModelAdmin):
+    list_display = 'username', 'amount_brl', 'amount_btc', 'exchange_rate', \
+                   'order_state', 'created_at'
+
+
+admin.site.register(BillingAccount, BillingAccountModelAdmin)
+admin.site.register(BTCOrder, BTCOrderModelAdmin)
+admin.site.register(BTCSellOrder, BTCSellOrderModelAdmin)
+admin.site.register(BTCBuyOrder, BTCBuyOrderModelAdmin)
+admin.site.register(User, UserAdmin)
