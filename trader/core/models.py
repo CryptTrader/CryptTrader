@@ -16,6 +16,9 @@ ORDER_TYPE = (
 
 
 class User(AbstractUser):
+    """
+    Customized User model for CryptTrader.
+    """
     date_of_birth = models.DateField('date of birth', null=True)
     tax_id = models.CharField('tax id', max_length=32, null=True)
 
@@ -27,6 +30,11 @@ class User(AbstractUser):
 
 
 class BillingAccount(models.Model):
+    """
+    Billing account associated to a user.
+
+    This class summarizes the data related to the billing account.
+    """
     user = models.ForeignKey('User', related_name='billing_account')
     balance_brl = models.DecimalField('BRL balance', max_digits=15, decimal_places=6)
     balance_btc = models.DecimalField('BTC balance', max_digits=15, decimal_places=6)

@@ -35,6 +35,8 @@ class BTCOrderModelAdmin(admin.ModelAdmin):
     def is_executed(self, obj):
         return obj.order_state == 'EXECUTED'
 
+    is_executed.boolean = True
+    execute_order.boolean = True
     execute_order.short_description = 'Execute Orders'
     cancel_order.short_description = 'Cancel Orders'
 
