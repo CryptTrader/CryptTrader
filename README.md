@@ -1,30 +1,23 @@
-Django Project Template 
-=======================
+CryptTrader Platform
+====================
 
-Django project structure to kick off development.
+[![Build Status](https://travis-ci.org/CryptTrader/CryptTrader.svg?branch=master)](https://travis-ci.org/CryptTrader/CryptTrader)
+[![codecov](https://codecov.io/gh/CryptTrader/CryptTrader/branch/master/graph/badge.svg)](https://codecov.io/gh/CryptTrader/CryptTrader)
+[![Code Health](https://landscape.io/github/CryptTrader/CryptTrader/master/landscape.svg?style=flat)](https://landscape.io/github/CryptTrader/CryptTrader/master)
 
-Creating a project
-==================
+Dependencies
+------------
+* Python 3.6
+* Django 1.11
 
 Installation
 ------------
 
-To start a new project with this template:
 
-    django-admin.py startproject \
-      --template=https://goo.gl/kH0mN8 \
-      --extension=py,rst,yml \
-      --name=Procfile \
-      <project_name> .
+Testing
+-------
 
-Setting enviroment properties
------------------------------
+Known Issues
+------------
 
-Once the project is created, we have to set the environment variables on the project:
-    $ cp contrib/env-sample .env   # Remember to change the SECRET_KEY
-
-Installing dependencies
------------------------
-
-We also need to make sure all the dependencies are installed:
-    $ pip install -r requirements/dev.txt  # This can also be done inside a virtual environment
+None.
