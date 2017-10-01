@@ -75,6 +75,9 @@ class BillingAccount(models.Model):
 
 
 class BTCOrder(models.Model):
+    """
+    Generic model that represents an order. It can be BUY or SELL BTCs.
+    """
     type = models.CharField('type', max_length=255, choices=ORDER_TYPE)
     billing_account = models.ForeignKey('BillingAccount', related_name='orders')
     order_state = models.CharField('state', max_length=255, choices=ORDER_STATES)
@@ -109,6 +112,7 @@ class BTCOrder(models.Model):
 
 
 class BTCSellOrder(BTCOrder):
+    """Order to sell BTC."""
     objects = BTCSellOrderManager()
 
     class Meta:
@@ -118,6 +122,7 @@ class BTCSellOrder(BTCOrder):
 
 
 class BTCBuyOrder(BTCOrder):
+    """Order to buy BTC."""
     objects = BTCBuyOrderManager()
 
     class Meta:
@@ -127,6 +132,10 @@ class BTCBuyOrder(BTCOrder):
 
 
 class FundsTransfer(models.Model):
+    """
+    Represents a funds transfer request. When executed, it will be accounted
+    as balance available on a Billing Account.
+    """
     billing_account = models.ForeignKey('BillingAccount', related_name='funds_transfers')
     funds_transfer_state = models.CharField('state', max_length=255, choices=ORDER_STATES)
     amount_brl = models.DecimalField(
