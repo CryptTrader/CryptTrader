@@ -8,7 +8,7 @@ from trader.core.models import User
 class UserModelTest(test.TestCase):
     def setUp(self):
         self.today = datetime.date.today()
-        self.u = User.objects.create(tax_id='1', date_of_birth=self.today)
+        self.u = User.objects.create(username='u', tax_id='1', date_of_birth=self.today)
 
     def test_user_tax_id_type(self):
         """User should have Tax ID field as string."""
@@ -25,3 +25,7 @@ class UserModelTest(test.TestCase):
     def test_user_dob_value(self):
         """User DOB should match."""
         self.assertEqual(self.u.date_of_birth, self.today)
+
+    def test_str_method(self):
+        """__str__() method should display username."""
+        self.assertIn('u', str(self.u))

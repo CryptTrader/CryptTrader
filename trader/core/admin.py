@@ -5,11 +5,13 @@ from .models import BillingAccount, BTCOrder, BTCSellOrder, BTCBuyOrder, User, F
 
 
 def execute_order(self, request, queryset):
+    del request  # Not user
     queryset.update(order_state='EXECUTED')
 
 
 def cancel_order(self, request, queryset):
-    queryset.update(order_state='EXECUTED')
+    del request  # Not user
+    queryset.update(order_state='CANCELLED')
 
 
 class BillingAccountModelAdmin(admin.ModelAdmin):

@@ -7,7 +7,7 @@ from trader.core.models import User, BillingAccount, FundsTransfer
 
 class FundsTransferTest(test.TestCase):
     def setUp(self):
-        u = User.objects.create()
+        u = User.objects.create(username='username')
         ba = BillingAccount.objects.create(user=u)
         self.ft = FundsTransfer.objects.create(billing_account=ba, amount_brl=10.)
 
@@ -34,3 +34,10 @@ class FundsTransferTest(test.TestCase):
     def test_has_modified_at_field(self):
         """Funds transfer should have datetime modified_at field."""
         self.assertIsInstance(self.ft.modified_at, datetime.datetime)
+
+    def test_str_method(self):
+        """__str__() method should display username, amount and currency."""
+        expected = ['username', 'BRL', '10.0', 'PENDING']
+        with self.subTest():
+            for e in expected:
+                self.assertIn(e, str(self.ft))

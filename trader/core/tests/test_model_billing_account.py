@@ -9,7 +9,7 @@ from trader.core.models import BillingAccount, User, BTCBuyOrder, FundsTransfer,
 class BillingAccountModelTest(test.TestCase):
     def setUp(self):
         today = datetime.date.today()
-        self.u = User.objects.create(username='u', tax_id='1', date_of_birth=today)
+        self.u = User.objects.create(username='username', tax_id='1', date_of_birth=today)
         self.ba = BillingAccount.objects.create(user=self.u)
 
     def test_billing_account_created(self):
@@ -31,6 +31,13 @@ class BillingAccountModelTest(test.TestCase):
     def test_has_modified_at_field(self):
         """Billing Account should have datetime modified_at field."""
         self.assertIsInstance(self.ba.modified_at, datetime.datetime)
+
+    def test_str_method(self):
+        """__str__() method should display username, amount and currency."""
+        expected = ['username', 'BRL', '0.0']
+        with self.subTest():
+            for e in expected:
+                self.assertIn(e, str(self.ba))
 
 
 class BillingAccountBalancesWithPendingBTCBuyOrder(test.TestCase):
