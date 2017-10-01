@@ -86,9 +86,9 @@ class BTCOrder(models.Model):
     """
     Generic model that represents an order. It can be BUY or SELL BTCs.
     """
-    type = models.CharField('type', max_length=255, choices=ORDER_TYPE)
+    type = models.CharField('type', max_length=255, choices=ORDER_TYPE, default='BUYBTC')
     billing_account = models.ForeignKey('BillingAccount', related_name='orders')
-    order_state = models.CharField('state', max_length=255, choices=ORDER_STATES)
+    order_state = models.CharField('state', max_length=255, choices=ORDER_STATES, default='PENDING')
     amount_brl = CryptAmount('BRL amount')
     amount_btc = CryptAmount('BTC amount')
 
@@ -141,7 +141,7 @@ class FundsTransfer(models.Model):
     as balance available on a Billing Account.
     """
     billing_account = models.ForeignKey('BillingAccount', related_name='funds_transfers')
-    funds_transfer_state = models.CharField('state', max_length=255, choices=ORDER_STATES)
+    funds_transfer_state = models.CharField('state', max_length=255, choices=ORDER_STATES, default='PENDING')
     amount_brl = CryptAmount('BRL amount')
 
     # Audit fields
