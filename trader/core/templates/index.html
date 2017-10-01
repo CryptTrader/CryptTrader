@@ -16,10 +16,20 @@
         <div class="col-lg-2 col-md-12">
             <h1>Menu</h1>
             <div class="row">
+                Meu saldo:
+                <ul>
+                    <li>R$ {{ request.user.billing_account.balance_brl|floatformat:2 }}</li>
+                    <li>B$ {{ request.user.billing_account.balance_btc|floatformat:2 }}</li>
+                </ul>
+            </div>
+            <div class="row">
                 <button type="button" class="btn btn-success">Oferta de compra</button>
             </div>
             <div class="row">
                 <button type="button" class="btn btn-danger">Oferta de venda</button>
+            </div>
+            <div class="row">
+                <button type="button" class="btn btn-info">Transferir fundos</button>
             </div>
         </div>
     </div>
