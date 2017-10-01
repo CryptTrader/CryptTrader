@@ -42,17 +42,15 @@ class BTCOrderModelAdmin(admin.ModelAdmin):
 
 
 class BTCBuyOrderModelAdmin(BTCOrderModelAdmin):
-    list_display = 'username', 'amount_brl', 'amount_btc', 'exchange_rate', \
-                   'order_state', 'created_at'
+    list_display = 'username', 'amount_brl', 'amount_btc', 'exchange_rate', 'order_state', 'created_at'
 
 
 class BTCSellOrderModelAdmin(BTCOrderModelAdmin):
-    list_display = 'username', 'amount_brl', 'amount_btc', 'exchange_rate', \
-                   'order_state', 'created_at'
+    list_display = 'username', 'amount_brl', 'amount_btc', 'exchange_rate', 'order_state', 'created_at'
 
 
 class FundsTransferModelAdmin(admin.ModelAdmin):
-    list_display = 'username', 'amount_brl', 'is_executed', 'funds_transfer_state'
+    list_display = 'username', 'amount_brl', 'is_executed', 'funds_transfer_state', 'created_at'
     search_fields = 'state',
     date_hierarchy = 'created_at'
     actions_on_bottom = True
