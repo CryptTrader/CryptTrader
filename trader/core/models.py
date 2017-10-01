@@ -64,16 +64,16 @@ class BillingAccount(models.Model):
     @property
     def balance_btc(self):
         agg_func = Coalesce(Sum('amount_btc'), 0)
-        buy_btc = self.orders.filter(type='BUYBTC', order_state='EXECUTED').aggregate(sum_=agg_func)['sum_']
-        sell_btc = self.orders.filter(type='SELLBTC', order_state='EXECUTED').aggregate(sum_=agg_func)['sum_']
+        buy_btc = self.orders.filter(type='BUYBTC', order_state='EXECUTED').aggregate(s=agg_func)['s']
+        sell_btc = self.orders.filter(type='SELLBTC', order_state='EXECUTED').aggregate(s=agg_func)['s']
         return buy_btc - sell_btc
 
     @property
     def balance_brl(self):
-        orders_to_count = ['EXECUTED', 'PENDING']
+        orders_states = ['EXECUTED', 'PENDING']
         agg_func = Coalesce(Sum('amount_brl'), 0)
 
-        buy_brl = self.orders.filter(type='BUYBTC', order_state__in=orders_to_count).aggregate(s=agg_func)['s']
+        buy_brl = self.orders.filter(type='BUYBTC', order_state__in=orders_states).aggregate(s=agg_func)['s']
         sell_brl = self.orders.filter(type='SELLBTC', order_state='EXECUTED').aggregate(s=agg_func)['s']
         transfered = self.funds_transfers.filter(funds_transfer_state='EXECUTED').aggregate(s=agg_func)['s']
         return transfered - buy_brl - sell_brl
