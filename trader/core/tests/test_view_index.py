@@ -46,4 +46,4 @@ class IndexViewTest(test.TestCase):
         expected = '<h2>Compra</h2>', '<h2>Venda</h2>'
         with self.subTest():
             for exp in expected:
-                self.assertIn(exp, self.r)
+                self.assertContains(self.r, exp, 1)
