@@ -1,4 +1,7 @@
+from decimal import Decimal
+
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Sum
 from django.db.models.functions import Coalesce
@@ -75,8 +78,12 @@ class BTCOrder(models.Model):
     type = models.CharField('type', max_length=255, choices=ORDER_TYPE)
     billing_account = models.ForeignKey('BillingAccount', related_name='orders')
     order_state = models.CharField('state', max_length=255, choices=ORDER_STATES)
-    amount_brl = models.DecimalField('BRL amount', max_digits=15, decimal_places=6)
-    amount_btc = models.DecimalField('BTC amount', max_digits=15, decimal_places=6)
+    amount_brl = models.DecimalField(
+        'BRL amount', max_digits=15, decimal_places=6, validators=[MinValueValidator(Decimal('0.01'))]
+    )
+    amount_btc = models.DecimalField(
+        'BTC amount', max_digits=15, decimal_places=6, validators=[MinValueValidator(Decimal('0.01'))]
+    )
 
     # Audit fields
     created_at = models.DateTimeField('created at', auto_now_add=True)
@@ -122,7 +129,9 @@ class BTCBuyOrder(BTCOrder):
 class FundsTransfer(models.Model):
     billing_account = models.ForeignKey('BillingAccount', related_name='funds_transfers')
     funds_transfer_state = models.CharField('state', max_length=255, choices=ORDER_STATES)
-    amount_brl = models.DecimalField('BRL amount', max_digits=15, decimal_places=6)
+    amount_brl = models.DecimalField(
+        'BRL amount', max_digits=15, decimal_places=6, validators=[MinValueValidator(Decimal('0.01'))]
+    )
 
     # Audit fields
     created_at = models.DateTimeField('created at', auto_now_add=True)
