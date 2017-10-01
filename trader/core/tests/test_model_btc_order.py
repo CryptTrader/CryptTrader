@@ -1,6 +1,7 @@
 from django import test
 
 
-class BTCBuyOrderTestCase(test.TestCase):
+class BTCOrderTestCase(test.TestCase):
     def setUp(self):
         pass
+
