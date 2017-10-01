@@ -1,0 +1,22 @@
+<table class="table">
+    <thead class="thead-inverse">
+    <tr>
+        <th>BRL</th>
+        <th>BTC</th>
+        <th>BRL/BTC</th>
+        <th>Criada em</th>
+        <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for order in orders %}
+        <tr>
+            <td>R$ {{ order.amount_brl|floatformat:2 }}</td>
+            <td>B$ {{ order.amount_btc|floatformat:2 }}</td>
+            <td>{{ order.exchange_rate|floatformat:4 }}</td>
+            <td>{{ order.created_at|date:"d/m/Y H:i:s" }}</td>
+            <td><button type="button" class="btn btn-sm btn-warning">Realizar</button></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

@@ -47,3 +47,10 @@ class IndexViewTest(test.TestCase):
         with self.subTest():
             for exp in expected:
                 self.assertContains(self.r, exp, 1)
+
+    def test_offer_creation(self):
+        """Template should have BUY and SELL offer creation buttons."""
+        expected = '>Oferta de compra<', '>Oferta de venda<'
+        with self.subTest():
+            for exp in expected:
+                self.assertContains(self.r, exp, 1)
