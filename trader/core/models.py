@@ -76,7 +76,7 @@ class BillingAccount(models.Model):
         buy_brl = self.orders.filter(type='BUYBTC', order_state__in=orders_states).aggregate(s=agg_func)['s']
         sell_brl = self.orders.filter(type='SELLBTC', order_state='EXECUTED').aggregate(s=agg_func)['s']
         transfered = self.funds_transfers.filter(funds_transfer_state='EXECUTED').aggregate(s=agg_func)['s']
-        return transfered - buy_brl - sell_brl
+        return transfered + sell_brl - buy_brl
 
     def __str__(self):
         return '{} - BRL {} - BTC {}'.format(self.user.username, self.balance_brl, self.balance_btc)
