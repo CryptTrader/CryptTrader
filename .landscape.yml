@@ -3,3 +3,5 @@ python-targets:
 pep8:
   full: true
 autodetect: true
+ignore-patterns:
+  - (^|/)\d{4}_.*.py(/|$)
