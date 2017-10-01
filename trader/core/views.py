@@ -1,5 +1,12 @@
-from django.http import HttpResponse
+from django.shortcuts import render
+
+from trader.core.models import BTCOrder
 
 
 def index(request):
-    return HttpResponse('Hi, CryptTrader!')
+    sell_orders = BTCOrder.objects.filter(order_state='PENDING', type='SELLBTC')
+    buy_orders = BTCOrder.objects.filter(order_state='PENDING', type='BUYBTC')
+    return render(request, 'index.html', {
+        'sell_orders': sell_orders,
+        'buy_orders': buy_orders
+    })

@@ -51,6 +51,10 @@ class BTCOrderTestCase(test.TestCase):
         """Order should have datetime modified_at field."""
         self.assertIsInstance(self.order.modified_at, datetime.datetime)
 
+    def test_exchange_rate(self):
+        """Exchange rate should be BRL / BTC."""
+        self.assertEqual(self.order.exchange_rate, 20)
+
     def test_str_method(self):
         """__str__() method should display username, amount and currency."""
         expected = ['username', 'BRL', '10.0', '0.5', 'PENDING']
