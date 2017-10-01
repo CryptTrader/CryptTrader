@@ -4,13 +4,13 @@ from django.contrib.auth.admin import UserAdmin
 from .models import BillingAccount, BTCOrder, BTCSellOrder, BTCBuyOrder, User, FundsTransfer
 
 
-def execute_order(self, request, queryset):
-    del request  # Not user
+def execute_order(_, request, queryset):
+    del request  # Not used
     queryset.update(order_state='EXECUTED')
 
 
-def cancel_order(self, request, queryset):
-    del request  # Not user
+def cancel_order(_, request, queryset):
+    del request  # Not used
     queryset.update(order_state='CANCELLED')
 
 
