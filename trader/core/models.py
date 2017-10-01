@@ -20,6 +20,17 @@ ORDER_TYPE = (
 )
 
 
+class CryptAmount(models.DecimalField):
+    description = 'CryptTrader amount'
+
+    def __init__(self, *args, **kwargs):
+        kwargs['validators'] = [MinValueValidator(Decimal('0.01'))]
+        kwargs['max_digits'] = 15
+        kwargs['decimal_places'] = 6
+
+        super().__init__(*args, **kwargs)
+
+
 class User(AbstractUser):
     """
     Customized User model for CryptTrader.
@@ -52,23 +63,20 @@ class BillingAccount(models.Model):
 
     @property
     def balance_btc(self):
-        aggregate_func = Coalesce(Sum('amount_btc'), 0)
-        total_buy_btc = self.orders.filter(type='BUYBTC', order_state='EXECUTED') \
-            .aggregate(sum_=aggregate_func)['sum_']
-        total_sell_btc = self.orders.filter(type='SELLBTC', order_state='EXECUTED') \
-            .aggregate(sum_=aggregate_func)['sum_']
-        return total_buy_btc - total_sell_btc
+        agg_func = Coalesce(Sum('amount_btc'), 0)
+        buy_btc = self.orders.filter(type='BUYBTC', order_state='EXECUTED').aggregate(sum_=agg_func)['sum_']
+        sell_btc = self.orders.filter(type='SELLBTC', order_state='EXECUTED').aggregate(sum_=agg_func)['sum_']
+        return buy_btc - sell_btc
 
     @property
     def balance_brl(self):
-        aggregate_func = Coalesce(Sum('amount_brl'), 0)
-        total_buy_brl = self.orders.filter(type='BUYBTC', order_state__in=['EXECUTED', 'PENDING']) \
-            .aggregate(sum_=aggregate_func)['sum_']
-        total_sell_brl = self.orders.filter(type='SELLBTC', order_state='EXECUTED') \
-            .aggregate(sum_=aggregate_func)['sum_']
-        total_transfered = self.funds_transfers.filter(funds_transfer_state='EXECUTED') \
-            .aggregate(sum_=aggregate_func)['sum_']
-        return total_transfered - total_buy_brl - total_sell_brl
+        orders_to_count = ['EXECUTED', 'PENDING']
+        agg_func = Coalesce(Sum('amount_brl'), 0)
+
+        buy_brl = self.orders.filter(type='BUYBTC', order_state__in=orders_to_count).aggregate(s=agg_func)['s']
+        sell_brl = self.orders.filter(type='SELLBTC', order_state='EXECUTED').aggregate(s=agg_func)['s']
+        transfered = self.funds_transfers.filter(funds_transfer_state='EXECUTED').aggregate(s=agg_func)['s']
+        return transfered - buy_brl - sell_brl
 
     def __str__(self):
         return '{} - BRL {} - BTC {}'.format(self.user.username, self.balance_brl, self.balance_btc)
@@ -81,12 +89,8 @@ class BTCOrder(models.Model):
     type = models.CharField('type', max_length=255, choices=ORDER_TYPE)
     billing_account = models.ForeignKey('BillingAccount', related_name='orders')
     order_state = models.CharField('state', max_length=255, choices=ORDER_STATES)
-    amount_brl = models.DecimalField(
-        'BRL amount', max_digits=15, decimal_places=6, validators=[MinValueValidator(Decimal('0.01'))]
-    )
-    amount_btc = models.DecimalField(
-        'BTC amount', max_digits=15, decimal_places=6, validators=[MinValueValidator(Decimal('0.01'))]
-    )
+    amount_brl = CryptAmount('BRL amount')
+    amount_btc = CryptAmount('BTC amount')
 
     # Audit fields
     created_at = models.DateTimeField('created at', auto_now_add=True)
@@ -138,9 +142,7 @@ class FundsTransfer(models.Model):
     """
     billing_account = models.ForeignKey('BillingAccount', related_name='funds_transfers')
     funds_transfer_state = models.CharField('state', max_length=255, choices=ORDER_STATES)
-    amount_brl = models.DecimalField(
-        'BRL amount', max_digits=15, decimal_places=6, validators=[MinValueValidator(Decimal('0.01'))]
-    )
+    amount_brl = CryptAmount('BRL amount')
 
     # Audit fields
     created_at = models.DateTimeField('created at', auto_now_add=True)
