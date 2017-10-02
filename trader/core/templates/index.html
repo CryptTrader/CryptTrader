@@ -23,14 +23,19 @@
                 </ul>
             </div>
             <div class="row">
-                <button type="button" class="btn btn-success">Oferta de compra</button>
+                <button type="button" data-toggle="modal" data-target="#buyOrderModal" class="btn btn-success">Oferta de compra</button>
             </div>
             <div class="row">
-                <button type="button" class="btn btn-danger">Oferta de venda</button>
+                <button type="button" data-toggle="modal" data-target="#sellOrderModal" class="btn btn-danger">Oferta de venda</button>
             </div>
             <div class="row">
                 <button type="button" class="btn btn-info">Transferir fundos</button>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block modals %}
+    {% include 'components/new_sell_order_modal.html' with form=sell_order_form %}
+    {% include 'components/new_buy_order_modal.html' with form=buy_order_form %}
 {% endblock %}

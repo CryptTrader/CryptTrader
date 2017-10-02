@@ -1,0 +1,38 @@
+<!-- Buy Order Modal -->
+<div class="modal fade" id="buyOrderModal" tabindex="-1" role="dialog" aria-labelledby="buyOrderModalLabel"
+     aria-hidden="true">
+    <form action="{% url 'core:buy-order' %}" method="POST">
+        {% csrf_token %}
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="buyOrderModalLabel">Nova ordem de compra BTC</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="{{ form.amount_brl.id_for_label }}">Valor R$</label>
+                        <input type="number" name="{{ form.amount_brl.html_name }}" class="form-control"
+                               id="{{ form.amount_brl.id_for_label }}" placeholder="Digite o valor BRL">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.amount_btc.id_for_label }}">Valor B$</label>
+                        <input type="number" name="{{ form.amount_btc.html_name }}" class="form-control"
+                               id="{{ form.amount_btc.id_for_label }}" placeholder="Digite o valor BTC">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Enviar ordem</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+</script>
