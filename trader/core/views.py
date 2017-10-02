@@ -17,28 +17,27 @@ def index(request):
     })
 
 
-def create_order(form, user, type):
+def create_order(form, user, type_):
     new_order = form.save(commit=False)
     new_order.billing_account = user.billing_account
-    new_order.type = type
+    new_order.type = type_
     new_order.save()
+
+
+def order_view(request, form_class, type_):
+    if request.method == 'POST':
+        form = form_class(request.POST)
+        if form.is_valid():
+            create_order(form, request.user, type_)
+            return redirect(r('core:index'))
+    return redirect(r('core:index'))
 
 
 @login_required
 def sell_order(request):
-    if request.method == 'POST':
-        form = BTCSellOrderForm(request.POST)
-        if form.is_valid():
-            create_order(form, request.user, 'SELLBTC')
-            return redirect(r('core:index'))
-    return redirect(r('core:index'))
+    return order_view(request, BTCSellOrderForm, 'SELLBTC')
 
 
 @login_required
 def buy_order(request):
-    if request.method == 'POST':
-        form = BTCSellOrderForm(request.POST)
-        if form.is_valid():
-            create_order(form, request.user, 'BUYBTC')
-            return redirect(r('core:index'))
-    return redirect(r('core:index'))
+    return order_view(request, BTCBuyOrderForm, 'BUYBTC')
